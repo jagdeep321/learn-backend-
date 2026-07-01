@@ -10,6 +10,5 @@ export const ConnectDatabse = async () => {
 
     } catch (error) {
         console.log(error);
-
     }
 }

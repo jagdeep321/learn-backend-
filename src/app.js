@@ -2,7 +2,6 @@ import express from "express";
 import authRoute from "./routes/auth.route.js";
 import cors from 'cors'
 import { ConnectDatabse } from "./database/database.js";
-
 // env files variable ko access krne k liye
 import dotenv from "dotenv";
 dotenv .config()
@@ -20,7 +19,7 @@ const PORT = 9090
 
 ConnectDatabse()
 
-app.use("/api/v1",authRoute)
+app.use("/api/v1/auth",authRoute)
 
 app.listen(PORT,()=>{
     console.log("server is running on port 9090.........");
