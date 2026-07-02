@@ -1,12 +1,13 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken"
 
 export const Signup = async (req, res) => {
 
     try {
         const { name, email, password } = req.body
 
-
+           //password hide krn vste property 
         const salt = bcrypt.genSaltSync(10);
         const encryptedPassword = bcrypt.hashSync(password, salt);
 
@@ -28,6 +29,7 @@ export const Signup = async (req, res) => {
 }
 
 export const Login = async (req, res) => {
+console.log("login api called.........");
 
     try {
         const { email, password } = req.body
@@ -44,7 +46,9 @@ export const Login = async (req, res) => {
             res.status(401).json({ message: "Invalid password" })
         }
 
-        res.status(200).json({ message: "Login successfully", data: user })
+        var token = jwt.sign({ id:user._id, name:user.name , email:user.email }, process.env.SECRET_KEY, { expiresIn: '365d' });
+
+        res.status(200).json({ message: "Login successfully", data: user , token })
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: error.message })
