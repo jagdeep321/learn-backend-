@@ -1,10 +1,14 @@
 import express from "express";
-import { Login, Signup } from "../controller/auth.controller.js";
+import { GetMyAccount, Login, Signup } from "../controller/auth.controller.js";
+import { Middleware } from "../middleware.js";
 
 const authRoute = express.Router()
 
 authRoute.post("/signup", Signup)
 authRoute.post("/login", Login)
+
+
+authRoute.get("/me", Middleware, GetMyAccount)
 // authRoute.post("/login")
 
 

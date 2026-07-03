@@ -7,7 +7,7 @@ export const Signup = async (req, res) => {
     try {
         const { name, email, password } = req.body
 
-           //password hide krn vste property 
+        //password hide krn vste property 
         const salt = bcrypt.genSaltSync(10);
         const encryptedPassword = bcrypt.hashSync(password, salt);
 
@@ -29,7 +29,7 @@ export const Signup = async (req, res) => {
 }
 
 export const Login = async (req, res) => {
-console.log("login api called.........");
+    console.log("login api called.........");
 
     try {
         const { email, password } = req.body
@@ -46,13 +46,26 @@ console.log("login api called.........");
             res.status(401).json({ message: "Invalid password" })
         }
 
-        var token = jwt.sign({ id:user._id, name:user.name , email:user.email }, process.env.SECRET_KEY, { expiresIn: '365d' });
+        var token = jwt.sign({ id: user._id, name: user.name, email: user.email }, process.env.SECRET_KEY, { expiresIn: '365d' });
 
-        res.status(200).json({ message: "Login successfully", data: user , token })
+        res.status(200).json({ message: "Login successfully", data: user, token })
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: error.message })
 
     }
 
+}
+
+export const GetMyAccount = async (req, res) => {
+    const id = req.id
+
+    try {
+        const user = await User.findById(id)
+        user.password = undefined
+        res.status(200).json({ data: user })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message })
+    }
 }
