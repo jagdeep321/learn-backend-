@@ -8,14 +8,14 @@ export const Signup = async (req, res) => {
         const { name, email, password } = req.body
 
         //password hide krn vste property 
-        const salt = bcrypt.genSaltSync(10);
-        const encryptedPassword = bcrypt.hashSync(password, salt);
+        // const salt = bcrypt.genSaltSync(10);
+        // const encryptedPassword = bcrypt.hashSync(password, salt);
 
-        const data = {
-            name,
-            email,
-            password: encryptedPassword
-        }
+        // const data = {
+        //     name,
+        //     email,
+        //     password: encryptedPassword
+        // }
 
         const savedUser = await User.create(data)
 
@@ -62,6 +62,32 @@ export const GetMyAccount = async (req, res) => {
 
     try {
         const user = await User.findById(id)
+        user.password = undefined
+        res.status(200).json({ data: user })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export const Update = async (req, res) => {
+    const { id } = req.params
+    const { todo } = req.body
+
+    try {
+        // agar 1 document nikalna hai dn se
+        const user = await User.findById(id)
+
+        // agar sabhi document nikalna hai dn se
+        const users = await User.find({})
+
+        // agar 1 document ko update krna hai 
+        const user = await User.findByIdAndUpdate(id,{todo})
+
+        // agar mere ko 1 record delete krna hai db se
+        const user = await User.findByIdAndDelete(id)
+
+
         user.password = undefined
         res.status(200).json({ data: user })
     } catch (error) {
