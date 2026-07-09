@@ -1,29 +1,20 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
+import { AuthService } from "../service/auth.service.js";
 
 export const Signup = async (req, res) => {
 
-    try {
-        const { name, email, password } = req.body
+    const { name, email, password } = req.body
 
-        //password hide krn vste property 
-        // const salt = bcrypt.genSaltSync(10);
-        // const encryptedPassword = bcrypt.hashSync(password, salt);
+    const authService = new AuthService()
 
-        // const data = {
-        //     name,
-        //     email,
-        //     password: encryptedPassword
-        // }
+    const response = await authService.createUser({ name, email, password })
 
-        const savedUser = await User.create(data)
-
-        res.status(200).json({ message: "signup successfully", data: savedUser })
-    } catch (error) {
-        console.log(error);
+    if (response.status === 200) {
+        res.status(200).json({ message: "signup successfully", data: response.savedUser })
+    } else {
         res.status(500).json({ message: error.message })
-
     }
 
 }
@@ -82,7 +73,7 @@ export const Update = async (req, res) => {
         const users = await User.find({})
 
         // agar 1 document ko update krna hai 
-        const user = await User.findByIdAndUpdate(id,{todo})
+        const user = await User.findByIdAndUpdate(id, { todo })
 
         // agar mere ko 1 record delete krna hai db se
         const user = await User.findByIdAndDelete(id)

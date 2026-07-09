@@ -10,7 +10,7 @@ export const Middleware = (req, res, next) => {
         res.status(404).json({ message: "Token not found" })
     }
 
-      var decoded = jwt.verify(token, process.env.SECRET_KEY);
+    var decoded = jwt.verify(token, process.env.SECRET_KEY);
 
     req.id = decoded.id
     next()
